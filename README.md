@@ -22,6 +22,7 @@ require 'httparty'
 class PetApi
   include HTTParty
   base_uri "/api/v3"
+  #...
 
   def getPetById(petId, params, options = {})
     self.class.get("/pet/#{petId}", params: params.to_json, headers: { 'Content-Type' => 'application/json' }.merge(options))
@@ -34,7 +35,20 @@ class PetApi
   def addPet(body, options = {})
     self.class.post("/pet", body: body.to_json, headers: { 'Content-Type' => 'application/json' }.merge(options))
   end
-
   #...
 end
+```
+
+### Send default header in all request
+
+Authorization example:
+
+```
+pet_api = PetApi.new
+
+access_token = get_access_token
+
+pet_api.header = { "Authorization" => access_token }
+
+pet_api.getPetById(1)
 ```

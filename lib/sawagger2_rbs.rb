@@ -34,18 +34,28 @@ require 'httparty'
 
 class <%= @module_name %>
   include HTTParty
+  attr_accessor :default_headers
+
   base_uri "<%= @data[:base_uri] %>"
+
+  def initialize
+    default_headers = { 'Content-Type' => 'application/json' }
+  end
+
+  def header=(header)
+    default_headers = default_headers.merge(header)
+  end
   <%- @data[:endpoints].each do |endpoint| -%>
   <%- parameters = endpoint[:parameters] || [] -%>
   <%- path = endpoint[:path].gsub("{", '\#{') -%>
 
   <%- if endpoint[:method] == 'get' -%>
   def <%= endpoint[:method_name] %>(<%= parameters.push("params").join(", ") %>, options = {})
-    self.class.<%= endpoint[:method] %>("<%= path %>", params: params.to_json, headers: { 'Content-Type' => 'application/json' }.merge(options))
+    self.class.<%= endpoint[:method] %>("<%= path %>", { params: params.to_json, headers: default_headers }.merge(options))
   end
   <%- else -%>
   def <%= endpoint[:method_name] %>(<%= parameters.push("body").join(", ") %>, options = {})
-    self.class.<%= endpoint[:method] %>("<%= path %>", body: body.to_json, headers: { 'Content-Type' => 'application/json' }.merge(options))
+    self.class.<%= endpoint[:method] %>("<%= path %>", { body: body.to_json, headers: default_headers }.merge(options))
   end
   <%- end -%>
   <%- end -%>
