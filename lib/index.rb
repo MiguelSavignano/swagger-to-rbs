@@ -11,7 +11,7 @@ def to_underscore(string)
 end
 
 name = ARGV[0].dup || 'MyApi'
-path = ARGV[1].dup || 'spec/fixtures/swagger.json'
+path = ARGV[1].dup || 'swagger.json'
 
 result = Swagger2Rbs.generate(name, path)
 
