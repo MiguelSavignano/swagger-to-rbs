@@ -22,6 +22,8 @@ module Swagger2Rbs
         body_typed: body_typed,
         response_typed: response_typed,
       }
+    rescue => e
+      raise e, "Context: #{path} #{method} Message: #{e.message}"
     end
 
     def method_name
@@ -64,7 +66,7 @@ module Swagger2Rbs
       return "#{k}: {#{v.map{ |k2, v2| to_typed(k2, v2) }.join(", ")}}" if v.is_a?(Hash)
 
       if v[0]&.is_a?(Hash)
-        "#{k}: Array[{" + v[0].map{ |k, v| "#{k}: #{v&.capitalize}" }.join(", ") + "}]"
+        "#{k}: Array[{" + v[0].map{ |k, v| to_typed(k, v) }.join(", ") + "}]"
       else
         "#{k}: Array[#{v[0]&.capitalize}]"
       end
