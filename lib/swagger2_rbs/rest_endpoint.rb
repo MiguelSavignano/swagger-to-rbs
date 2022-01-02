@@ -46,7 +46,6 @@ module Swagger2Rbs
     def parameters_typed
       return nil if method != "get"
       parameters.map{|it| "String #{it}" }
-      .push("?Hash[String, String] params")
       .push("?Hash[untyped, untyped] options")
       .join(", ")
     end
@@ -79,7 +78,7 @@ module Swagger2Rbs
     end
 
     def parameters_for_method
-      return parameters.push("params = {}").push("options = {}").join(", ") if (method == "get")
+      return parameters.push("options = {}").join(", ") if (method == "get")
 
       parameters.push("body").push("options = {}").join(", ")
     end
