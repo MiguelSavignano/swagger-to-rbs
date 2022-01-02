@@ -1,5 +1,6 @@
 .env
-swagger.json
+/swagger.json
 my_api.rb
 my_api.rbs
 test.rb
+data.json
