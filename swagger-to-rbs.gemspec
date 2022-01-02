@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.description = 'Generate Http client and rbs files'
   s.authors     = ['Miguel Savignano']
   s.email       = 'migue.masx@gmail.com'
-  s.files       = Dir.glob('{bin,lib}/**/{*,.?*}') + %w[LICENSE README.md]
+  s.files       = Dir.glob('{bin,lib}/**/{*,.?*}') + %w[README.md]
   s.homepage    = 'https://github.com/MiguelSavignano/swagger-to-rbs'
   s.license     = 'MIT'
   s.require_paths = ['lib']
