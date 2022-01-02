@@ -3,7 +3,6 @@
 
 class <%= @module_name %>
   include HTTParty
-  attr_accessor default_headers: bot
 
   def initialize: -> void
   <%- @data[:endpoints].each do |endpoint| -%>
