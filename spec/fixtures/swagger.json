@@ -9,6 +9,76 @@
     }
   ],
   "paths": {
+    "/data/v1/policy": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "payloads": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "identifier": {
+                          "type": "object",
+                          "properties": {
+                            "externalIdField": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "Account": {
+                              "type": "object",
+                              "properties": {
+                                "UUID": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "InsuranceType": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Policy or policies were inserted/updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true,
+                      "description": "This means that the request was fine. However, there could be some insert or update wrong"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/oauth/token": {
       "post": {
         "tags": ["Authentication"],

@@ -77,6 +77,14 @@ describe 'Swagger2Rbs::RestEndpoint' do
         end
       end
 
+      describe 'path /data/v1/policy object of object' do
+        let(:path_method) { ["/data/v1/policy", "post"] }
+        it do
+          expect(subject.body_typed)
+          .to eq("{payloads: Array[{identifier: {externalIdField: String, value: String}, data: {Account: {UUID: String}, InsuranceType: String}}]} body, ?Hash[untyped, untyped] options")
+        end
+      end
+
       describe 'path /certificates array of string' do
         let(:path_method) { ["/certificates", "post"] }
         it do
