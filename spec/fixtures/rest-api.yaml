@@ -3,6 +3,8 @@ endpoints:
   - method_name: create_oauth_token
     path: /oauth/token
     method: post
+    body: # requestBody.content["application/json"].schema.oneOf[0].properties
+      client_id: String
   - method_name: config # operationId
     path: /configuration
     method: get

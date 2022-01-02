@@ -44,9 +44,9 @@ end
 Authorization example:
 
 ```
-pet_api = PetApi.new
+api = MyApi.new
 
-access_token = get_access_token
+access_token = api.get_access_token
 
 pet_api.header = { "Authorization" => access_token }
 
