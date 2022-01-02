@@ -7,7 +7,7 @@ module Swagger2Rbs
     def initialize(path, method, props)
       @path = path
       @method = method
-      @props = props
+      @props = props || {}
     end
 
     def to_h

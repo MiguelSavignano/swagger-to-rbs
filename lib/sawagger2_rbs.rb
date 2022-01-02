@@ -17,6 +17,16 @@ module Swagger2Rbs
     { base_uri: swagger_spec["servers"].first["url"], endpoints: result }
   end
 
+  def self.rest_api_all(spec)
+    result = []
+    spec[:endpoints].each do |endpoint|
+      rest_data = RestEndpoint.new(endpoint[:path], endpoint[:method], endpoint[:props])
+      result << rest_data.to_h
+    end
+
+    { base_uri: spec[:base_uri], endpoints: result }
+  end
+
   def self.mock_rest_api_data
     data = YAML.load_file('spec/fixtures/rest-api.yaml').transform_keys(&:to_sym)
     data[:endpoints].map!{|it| it.transform_keys(&:to_sym) }
