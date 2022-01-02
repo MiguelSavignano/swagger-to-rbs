@@ -11,7 +11,7 @@ curl https://petstore3.swagger.io/api/v3/openapi.json > swagger.json
 Generate http client based on [Httparty gem](https://github.com/jnunemaker/httparty)
 
 ```
-ruby lib/index.rb MyApi
+swagger-to-rbs generate --name MyApi --spec swagger.json
 ```
 
 Result:
