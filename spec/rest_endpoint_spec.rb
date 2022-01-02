@@ -25,7 +25,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
 
       describe 'path /accounts/{id}' do
         let(:path_method) { ["/accounts/{id}", "get"] }
-        it { expect(subject.path_with_parameters).to eq("/accounts/\\\#{id}") }
+        it { expect(subject.path_with_parameters).to eq("/accounts/\#{id}") }
       end
     end
 
@@ -36,7 +36,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
 
       describe 'path /accounts/{id}' do
         let(:path_method) { ["/accounts/{id}", "get"] }
-        it { expect(subject.parameters_for_method).to eq("id, params = {}, options = {}") }
+        it { expect(subject.parameters_for_method).to eq("id, options = {}") }
       end
     end
 
@@ -47,14 +47,14 @@ describe 'Swagger2Rbs::RestEndpoint' do
 
       describe 'path /accounts/{id}' do
         let(:path_method) { ["/accounts/{id}", "get"] }
-        it { expect(subject.parameters_typed).to eq("String id, ?Hash[String, String] params, ?Hash[untyped, untyped] options") }
+        it { expect(subject.parameters_typed).to eq("String id, ?Hash[untyped, untyped] options") }
       end
     end
 
     describe "#body" do
       describe 'path /accounts/{id}/contacts array of object' do
         let(:path_method) { ["/accounts/{id}/contacts", "post"] }
-        it { expect(subject.body["contact_numbers"]).to eq([{"number"=>"String", "type"=>"String"}]) }
+        it { expect(subject.body["contact_numbers"]).to eq([{"number"=>"string", "type"=>"string"}]) }
       end
     end
 
