@@ -29,7 +29,7 @@ module Swagger2Rbs
     end
 
     def path_with_parameters
-      path.gsub("{", '\#{')
+      path.gsub("{", '#{')
     end
 
     def parameters
