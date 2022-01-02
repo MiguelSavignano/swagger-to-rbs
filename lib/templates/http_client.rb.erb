@@ -3,12 +3,11 @@ require 'httparty'
 
 class <%= @module_name %>
   include HTTParty
-  attr_accessor :default_headers
 
   base_uri "<%= @data[:base_uri] %>"
 
   def initialize
-    default_headers = { 'Content-Type' => 'application/json' }
+    self.class.headers({ 'Content-Type' => 'application/json' })
   end
   <%- @data[:endpoints].each do |endpoint| -%>
 
