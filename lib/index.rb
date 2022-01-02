@@ -11,7 +11,7 @@ require_relative './sawagger2_rbs'
 class Swagger2RbsCli < Thor
   attr_reader :name, :swagger_path, :rest_api_path, :debug
 
-  desc 'genearte', 'generate docker files for rails application'
+  desc 'genearte', 'generate http client and rbs'
   option :name, desc: 'Name'
   option :spec, desc: 'Swagger file path'
   option :debug, desc: 'Generate debug file'
