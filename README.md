@@ -46,9 +46,8 @@ Authorization example:
 ```
 api = MyApi.new
 
-access_token = api.get_access_token
+MyApi.headers(Authorization: "Bearer #{access_token}")
+MyApi.base_uri("http://otherurl.test/api/v1)
 
-pet_api.header = { "Authorization" => access_token }
-
-pet_api.getPetById(1)
+api.getPetById(1)
 ```
