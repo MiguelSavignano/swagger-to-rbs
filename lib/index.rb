@@ -1,22 +1,24 @@
+# frozen_string_literal: true
 require 'pry'
 require 'json'
 require 'httparty'
 require 'yaml'
 require 'erb'
 require 'dotenv/load'
+require 'thor'
 require_relative './sawagger2_rbs'
 
-class Swagger2RbsCli
+class Swagger2RbsCli < Thor
   attr_reader :name, :swagger_path, :rest_api_path, :debug
 
-  def initialize(name: "MyApi", swagger_path: nil, rest_api_path: nil, debug: false)
-    @name = name
-    @swagger_path = swagger_path
-    @rest_api_path = rest_api_path
-    @debug = debug
-  end
-
-  def run
+  desc 'genearte', 'generate docker files for rails application'
+  option :name, desc: 'Name'
+  option :spec, desc: 'Swagger file path'
+  option :debug, desc: 'Generate debug file'
+  def generate
+    @name = options[:name]
+    @swagger_path = options[:spec]
+    @debug = options[:debug]
     data = fetch_data
     File.write(".rest-api.json", JSON.pretty_generate(data)) if debug
 
@@ -25,6 +27,7 @@ class Swagger2RbsCli
     File.write("#{file_name}.rbs", Swagger2Rbs.generate_rbs(name, data.dup))
   end
 
+  private
   def fetch_data
     if swagger_path
       swagger_spec = JSON.parse(File.read(swagger_path))
@@ -42,5 +45,4 @@ class Swagger2RbsCli
   end
 end
 
-Swagger2RbsCli.new(name: "MyApi", rest_api_path: 'rest-api.yaml', debug: true).run
-# Swagger2RbsCli.new(name: "MyApi", swagger_path: 'swagger.json', debug: true).run
+Swagger2RbsCli.start(ARGV)
