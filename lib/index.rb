@@ -12,12 +12,12 @@ end
 
 name = ARGV[0].dup || 'MyApi'
 path = ARGV[1].dup || 'swagger.json'
+debug = ARGV[2] == "--debug"
 
-# data = Swagger2Rbs.mock_rest_api_data
 swagger_spec = JSON.parse(File.read(path))
 
 data = Swagger2Rbs.swagger_to_rest_api(swagger_spec)
-File.write("data.json", JSON.pretty_generate(data))
+File.write("data.json", JSON.pretty_generate(data)) if debug
 
 File.write("#{to_underscore(name)}.rb", Swagger2Rbs.generate(name, data.dup))
 File.write("#{to_underscore(name)}.rbs", Swagger2Rbs.generate_rbs(name, data.dup))
