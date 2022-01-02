@@ -15,6 +15,7 @@ module Swagger2Rbs
         path: path_with_parameters,
         method: method,
         parameters: parameters,
+        parameters_for_method: parameters_for_method,
         parameters_typed: parameters_typed,
         method_name: method_name,
         body: body,

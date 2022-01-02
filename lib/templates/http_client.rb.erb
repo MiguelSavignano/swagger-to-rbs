@@ -10,7 +10,6 @@ class <%= @module_name %>
   def initialize
     default_headers = { 'Content-Type' => 'application/json' }
   end
-
   <%- @data[:endpoints].each do |endpoint| -%>
 
   <%- if endpoint[:method] == 'get' -%>

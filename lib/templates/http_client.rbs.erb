@@ -6,7 +6,6 @@ class <%= @module_name %>
   attr_accessor default_headers: bot
 
   def initialize: -> void
-
   <%- @data[:endpoints].each do |endpoint| -%>
 
   <%- if endpoint[:method] == 'get' -%>
