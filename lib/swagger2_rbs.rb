@@ -1,5 +1,4 @@
 require 'json'
-require 'httparty'
 require 'erb'
 require_relative 'swagger2_rbs/rest_endpoint'
 
