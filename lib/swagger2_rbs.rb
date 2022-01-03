@@ -25,8 +25,8 @@ module Swagger2Rbs
         end
         keys = [k]
       else
-        keys.push("2")
         yield keys.join("."), v
+        keys.pop()
       end
     end
   rescue => e
