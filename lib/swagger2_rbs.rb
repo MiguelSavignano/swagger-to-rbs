@@ -4,6 +4,16 @@ require_relative 'swagger2_rbs/rest_endpoint'
 
 module Swagger2Rbs
 
+  def self.resolve_ref(swagger_spec, key_path)
+    data = swagger_spec.dig(*key_path)
+    if data["schema"].key?("$ref")
+      path = data["schema"]["$ref"]
+      schema = swagger_spec.dig(*path.gsub("#/", "").split("/"))
+      data["schema"] = schema
+    end
+    swagger_spec
+  end
+
   def self.swagger_to_rest_api(swagger_spec)
     result = []
     swagger_spec["paths"].each do |path, data|
