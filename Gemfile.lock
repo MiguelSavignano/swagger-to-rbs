@@ -30,6 +30,7 @@ GEM
     rspec-support (3.10.3)
     slugify (1.0.7)
     thor (1.1.0)
+    vine (0.4)
 
 PLATFORMS
   ruby
@@ -41,6 +42,7 @@ DEPENDENCIES
   rspec
   slugify
   thor
+  vine
 
 BUNDLED WITH
    1.17.2

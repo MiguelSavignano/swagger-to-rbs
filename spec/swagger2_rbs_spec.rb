@@ -8,12 +8,6 @@ describe 'Swagger2Rbs' do
 
   describe '.resolve_ref' do
     it "resolve $ref requestBody" do
-      result = Swagger2Rbs.resolve_ref(swagger_spec, ["paths", "/pet", "put", "requestBody", "content", "application/json"])
-      expect(result.dig("paths", "/pet", "put", "requestBody", "content", "application/json", "schema"))
-      .to eq(swagger_spec["components"]["schemas"]["Pet"])
-    end
-
-    it "resolve $ref requestBody" do
       result = Swagger2Rbs.resolve_all_ref(swagger_spec)
       expect(result.dig("paths", "/pet", "put", "requestBody", "content", "application/json", "schema"))
       .to eq(swagger_spec["components"]["schemas"]["Pet"])

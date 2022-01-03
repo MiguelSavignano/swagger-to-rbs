@@ -4,5 +4,5 @@ gem 'dotenv'
 gem 'pry'
 gem 'slugify'
 gem 'thor'
-
+gem 'vine'
 gem 'rspec'

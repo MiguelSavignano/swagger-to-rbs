@@ -1,20 +1,9 @@
 require 'json'
 require 'erb'
+require 'vine'
 require_relative 'swagger2_rbs/rest_endpoint'
 
 module Swagger2Rbs
-
-  def self.resolve_ref(swagger_spec, key_path)
-    data = swagger_spec.dig(*key_path)
-    return swagger_spec unless data
-
-    if data["schema"].key?("$ref")
-      path = data["schema"]["$ref"]
-      schema = swagger_spec.dig(*path.gsub("#/", "").split("/"))
-      data["schema"] = schema
-    end
-    swagger_spec
-  end
 
   def self.walk(original, &block)
     original.each do |k, v|
@@ -28,31 +17,16 @@ module Swagger2Rbs
     end
   end
 
-  def self.get_em(original, h)
-    h.each_with_object([]) do |(k,v),keys|
-      keys << k
-      if v.is_a? Hash
-        if v.key?("$ref")
-          puts keys
-          # binding.pry
-          original[k] = {data: "TODO"}
-          # v["$ref"] = "TODOOOO"
-        end
-        keys.concat(get_em(original, v))
-      else
-        # puts v
-      end
-    end
-  end
-
   def self.resolve_all_ref(swagger_spec)
-    new_spec = swagger_spec
-    swagger_spec["paths"].each do |key, value|
-      swagger_spec.dig(*["paths", key]).each do |key2, value2|
-        # new_spec = resolve_ref(new_spec, ["paths", key, key2, "requestBody", "content", "application/json"])
+    new_swagger_spec = swagger_spec.dup
+    walk(swagger_spec) do |key, value|
+      if key.split(".").last == "$ref"
+        schema = swagger_spec.dig(*value.gsub("#/", "").split("/"))
+        update_key = key.split(".").reject{|k| k == "$ref"}.join(".")
+        new_swagger_spec.set(update_key, schema)
       end
     end
-    new_spec
+    swagger_spec
   end
 
   def self.swagger_to_rest_api(swagger_spec)
