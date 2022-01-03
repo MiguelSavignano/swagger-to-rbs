@@ -26,12 +26,12 @@ module Swagger2Rbs
         new_swagger_spec.set(update_key, schema)
       end
     end
-    swagger_spec
+    new_swagger_spec
   end
 
   def self.swagger_to_rest_api(swagger_spec)
     result = []
-    swagger_spec["paths"].each do |path, data|
+    resolve_all_ref(swagger_spec)["paths"].each do |path, data|
       data.each do |method, props|
         rest_data = RestEndpoint.new(path, method, props)
         result << rest_data.to_h
