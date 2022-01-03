@@ -6,12 +6,24 @@ module Swagger2Rbs
 
   def self.resolve_ref(swagger_spec, key_path)
     data = swagger_spec.dig(*key_path)
+    return swagger_spec unless data
+
     if data["schema"].key?("$ref")
       path = data["schema"]["$ref"]
       schema = swagger_spec.dig(*path.gsub("#/", "").split("/"))
       data["schema"] = schema
     end
     swagger_spec
+  end
+
+  def self.resolve_all_ref(swagger_spec)
+    new_spec = swagger_spec
+    swagger_spec["paths"].each do |key, value|
+      swagger_spec.dig(*["paths", key]).each do |key2, value2|
+        new_spec = resolve_ref(new_spec, ["paths", key, key2, "requestBody", "content", "application/json"])
+      end
+    end
+    new_spec
   end
 
   def self.swagger_to_rest_api(swagger_spec)
