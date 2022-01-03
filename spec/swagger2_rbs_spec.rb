@@ -19,12 +19,11 @@ describe 'Swagger2Rbs' do
       .to eq(swagger_spec["components"]["schemas"]["Pet"])
     end
 
-    it "resolve $ref requestBody" do
-      data = {"a" => 1, "b" => { "c" => {"$ref" => "#/componets"} }, "d" => "D"}
-      result = Swagger2Rbs.walk(data) do |key, value|
-        puts "key: #{key}, value: #{value}"
-      end
-      # puts data.merge(el)
-    end
+    # it "resolve $ref requestBody" do
+    #   data = {"a" => 1, "b" => { "c" => {"$ref" => "#/componets"} }, "d" => "D", "e": { "f" => "FFF"}}
+    #   result = Swagger2Rbs.walk(data) do |key, value|
+    #     puts "key: #{key}, value: #{value}"
+    #   end
+    # end
   end
 end

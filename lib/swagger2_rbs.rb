@@ -16,21 +16,16 @@ module Swagger2Rbs
     swagger_spec
   end
 
-  def self.walk(original, keys = [], &block)
+  def self.walk(original, &block)
     original.each do |k, v|
-      keys.push(k)
       if v.is_a?(Hash)
-        v.each do |k2, v2|
-          walk(v2, keys.push(k2), &block)
+        walk(v) do |k2, v2|
+          yield "#{k}.#{k2}", v2
         end
-        keys = [k]
       else
-        yield keys.join("."), v
-        keys.pop()
+        yield k, v
       end
     end
-  rescue => e
-    binding.pry
   end
 
   def self.get_em(original, h)
