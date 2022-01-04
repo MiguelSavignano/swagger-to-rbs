@@ -1,4 +1,10 @@
-### Usage
+## Install
+
+```
+gem install swagger-to-rbs generate
+```
+
+## Usage
 
 Dowload swagger spec
 
