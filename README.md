@@ -17,7 +17,7 @@ curl https://petstore3.swagger.io/api/v3/openapi.json > swagger.json
 Generate http client based on [Httparty gem](https://github.com/jnunemaker/httparty)
 
 ```
-swagger-to-rbs generate --name MyApi --spec swagger.json
+swagger-to-rbs generate --name PetApi --spec swagger.json
 ```
 
 Result:
@@ -50,7 +50,7 @@ end
 Authorization example:
 
 ```
-api = MyApi.new
+api = PetApi.new
 
 MyApi.headers(Authorization: "Bearer #{access_token}")
 MyApi.base_uri("http://otherurl.test/api/v1)
