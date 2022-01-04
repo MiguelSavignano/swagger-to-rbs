@@ -1,12 +1,11 @@
 require 'json'
 require 'erb'
-require 'vine'
 require_relative 'swagger2_rbs/rest_endpoint'
 
 module Swagger2Rbs
 
-  def self.walk(original, &block)
-    original.each do |k, v|
+  def self.walk(hash, &block)
+    hash.each do |k, v|
       if v.is_a?(Hash)
         walk(v) do |k2, v2|
           yield "#{k}.#{k2}", v2
@@ -17,13 +16,29 @@ module Swagger2Rbs
     end
   end
 
+  def self.set_value(hash, key, value)
+    arr = key.split(".")
+    last_key = arr.pop()
+    hash.dig(*arr)[last_key] = value
+    hash
+  rescue => e
+    hash
+  end
+
+  def self.resolve_ref(hash, key, value)
+    ref_key = value.gsub("#/", "").split("/")
+    data = hash.dig(*ref_key)
+    update_key = key.split(".").reject{|k| k == "$ref"}.join(".")
+
+    [update_key, data]
+  end
+
   def self.resolve_all_ref(swagger_spec)
     new_swagger_spec = swagger_spec.dup
     walk(swagger_spec) do |key, value|
       if key.split(".").last == "$ref"
-        schema = swagger_spec.dig(*value.gsub("#/", "").split("/"))
-        update_key = key.split(".").reject{|k| k == "$ref"}.join(".")
-        new_swagger_spec.set(update_key, schema)
+        update_key, data = resolve_ref(swagger_spec, key, value)
+        set_value(new_swagger_spec, update_key, data)
       end
     end
     new_swagger_spec
