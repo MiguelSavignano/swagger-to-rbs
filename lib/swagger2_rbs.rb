@@ -1,29 +1,9 @@
 require 'json'
 require 'erb'
 require_relative 'swagger2_rbs/rest_endpoint'
+require_relative 'swagger2_rbs/hash_helper'
 
 module Swagger2Rbs
-
-  def self.walk(hash, &block)
-    hash.each do |k, v|
-      if v.is_a?(Hash)
-        walk(v) do |k2, v2|
-          yield "#{k}.#{k2}", v2
-        end
-      else
-        yield k, v
-      end
-    end
-  end
-
-  def self.set_value(hash, key, value)
-    arr = key.split(".")
-    last_key = arr.pop()
-    hash.dig(*arr)[last_key] = value
-    hash
-  rescue => e
-    hash
-  end
 
   def self.resolve_ref(hash, key, value)
     ref_key = value.gsub("#/", "").split("/")
@@ -35,10 +15,10 @@ module Swagger2Rbs
 
   def self.resolve_all_ref(swagger_spec)
     new_swagger_spec = swagger_spec.dup
-    walk(swagger_spec) do |key, value|
+    HashHelper.walk(swagger_spec) do |key, value|
       if key.split(".").last == "$ref"
         update_key, data = resolve_ref(swagger_spec, key, value)
-        set_value(new_swagger_spec, update_key, data)
+        HashHelper.set_value(new_swagger_spec, update_key, data)
       end
     end
     new_swagger_spec
