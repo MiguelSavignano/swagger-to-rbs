@@ -30,16 +30,20 @@ class PetApi
   base_uri "/api/v3"
   #...
 
-  def getPetById(petId, params, options = {})
-    self.class.get("/pet/#{petId}", params: params.to_json, headers: { 'Content-Type' => 'application/json' }.merge(options))
+  def initialize
+    self.class.headers({ 'Content-Type' => 'application/json' })
+  end
+
+  def getPetById(petId, options = {})
+    self.class.get("/pet/#{petId}", options)
   end
 
   def updatePet(body, options = {})
-    self.class.put("/pet", body: body.to_json, headers: { 'Content-Type' => 'application/json' }.merge(options))
+    self.class.put("/pet", { body: body.to_json }.merge(options))
   end
 
   def addPet(body, options = {})
-    self.class.post("/pet", body: body.to_json, headers: { 'Content-Type' => 'application/json' }.merge(options))
+    self.class.post("/pet", { body: body.to_json }.merge(options))
   end
   #...
 end
