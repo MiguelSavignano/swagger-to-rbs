@@ -1,7 +1,7 @@
 ## Install
 
 ```
-gem install swagger-to-rbs generate
+gem install swagger-to-rbs
 ```
 
 ## Usage
