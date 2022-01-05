@@ -54,6 +54,11 @@ describe 'Swagger2Rbs::RestEndpoint' do
         let(:path_method) { ["/accounts/{id}", "get"] }
         it { expect(subject.parameters_typed).to eq("(String id, ?Hash[untyped, untyped] options)") }
       end
+
+      describe 'path /pet/{petId}' do
+        let(:path_method) { ["/pet/{petId}", "delete"] }
+        it { expect(subject.parameters_typed).to eq("(String petId, ?Hash[untyped, untyped] options)") }
+      end
     end
 
     describe "#body" do

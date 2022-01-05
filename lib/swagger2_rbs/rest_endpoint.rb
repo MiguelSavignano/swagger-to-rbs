@@ -46,7 +46,8 @@ module Swagger2Rbs
     end
 
     def parameters_typed
-      return nil if method != "get"
+      return nil unless parameters
+      return nil if parameters&.empty?
 
       result = parameters&.map{|it| "String #{it}" }
       &.push("?Hash[untyped, untyped] options")
