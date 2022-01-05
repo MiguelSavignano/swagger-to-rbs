@@ -94,7 +94,11 @@ module Swagger2Rbs
     def parameters_for_method
       return parameters.push("options = {}").join(", ") if (method == "get")
 
-      parameters.push("body").push("options = {}").join(", ")
+      if body&.empty?
+        parameters.push("options = {}").join(", ")
+      else
+        parameters.push("body").push("options = {}").join(", ")
+      end
     end
 
     def schema_to_typed(schema, memo = {})

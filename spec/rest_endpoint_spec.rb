@@ -40,8 +40,8 @@ describe 'Swagger2Rbs::RestEndpoint' do
       end
 
       describe 'path /pet/{petId}' do
-        let(:path_method) { ["/accounts/{id}", "delete"] }
-        it { expect(subject.parameters_for_method).to eq("id, options = {}") }
+        let(:path_method) { ["/pet/{petId}", "delete"] }
+        it { expect(subject.parameters_for_method).to eq("petId, options = {}") }
       end
     end
 
