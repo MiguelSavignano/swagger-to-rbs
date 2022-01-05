@@ -15,6 +15,7 @@ GEM
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
+    rbs (2.0.0)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -30,6 +31,8 @@ GEM
     rspec-support (3.10.3)
     slugify (1.0.7)
     thor (1.1.0)
+    typeprof (0.21.1)
+      rbs (>= 1.8.1)
 
 PLATFORMS
   ruby
@@ -41,6 +44,7 @@ DEPENDENCIES
   rspec
   slugify
   thor
+  typeprof
 
 BUNDLED WITH
    1.17.2

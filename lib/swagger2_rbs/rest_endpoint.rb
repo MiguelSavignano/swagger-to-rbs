@@ -64,14 +64,23 @@ module Swagger2Rbs
     "({" + body&.map{ |k, v| to_typed(k, v) }.join(", ") + "}" + " body, ?Hash[untyped, untyped] options)"
     end
 
+    def type_case(str)
+      case str
+      when "boolean"
+        "bool"
+      else
+        str&.capitalize
+      end
+    end
+
     def to_typed(k, v)
-      return "#{k}: #{v&.capitalize}" unless v.is_a?(Array) || v.is_a?(Hash)
+      return "#{k}: #{type_case(v)}" unless v.is_a?(Array) || v.is_a?(Hash)
       return "#{k}: {#{v.map{ |k2, v2| to_typed(k2, v2) }.join(", ")}}" if v.is_a?(Hash)
 
       if v[0]&.is_a?(Hash)
         "#{k}: Array[{" + v[0].map{ |k, v| to_typed(k, v) }.join(", ") + "}]"
       else
-        "#{k}: Array[#{v[0]&.capitalize}]"
+        "#{k}: Array[#{type_case(v[0])}]"
       end
     end
 
