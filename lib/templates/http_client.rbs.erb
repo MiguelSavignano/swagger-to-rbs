@@ -8,9 +8,9 @@ class <%= @module_name %>
   <%- @data[:endpoints].each do |endpoint| -%>
 
   <%- if endpoint[:method] == 'get' -%>
-  def <%= endpoint[:method_name] %>(<%= endpoint[:parameters_typed] %>) -> HTTParty::Response
+  def <%= endpoint[:method_name] %>: <%= endpoint[:parameters_typed] %> -> HTTParty::Response
   <%- else -%>
-  def <%= endpoint[:method_name] %>(<%= endpoint[:body_typed] %>) -> HTTParty::Response
+  def <%= endpoint[:method_name] %>: <%= endpoint[:body_typed] %> -> HTTParty::Response
   <%- end -%>
   <%- end -%>
 end

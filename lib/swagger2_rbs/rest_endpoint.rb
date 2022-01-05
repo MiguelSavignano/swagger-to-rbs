@@ -48,18 +48,20 @@ module Swagger2Rbs
     def parameters_typed
       return nil if method != "get"
 
-      parameters&.map{|it| "String #{it}" }
+      result = parameters&.map{|it| "String #{it}" }
       &.push("?Hash[untyped, untyped] options")
       &.join(", ")
+
+      "(#{result})"
     end
 
     def body_typed
-      return nil if method != "post"
+      return nil if method == "get"
 
-      return "Hash[String, untyped]" unless body
-      return "Hash[String, untyped]" if body.empty?
+      return "(Hash[String, untyped])" unless body
+      return "(Hash[String, untyped])" if body.empty?
 
-    "{" + body&.map{ |k, v| to_typed(k, v) }.join(", ") + "}" + " body, ?Hash[untyped, untyped] options"
+    "({" + body&.map{ |k, v| to_typed(k, v) }.join(", ") + "}" + " body, ?Hash[untyped, untyped] options)"
     end
 
     def to_typed(k, v)
