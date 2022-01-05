@@ -1,10 +1,11 @@
 require 'json'
 require 'pry'
-require_relative '../lib/swagger2_rbs/rest_endpoint'
+require_relative '../lib/swagger2_rbs'
 
+SPEC = Swagger2Rbs.resolve_all_ref(JSON.parse(File.read('spec/fixtures/swagger.json')))
 describe 'Swagger2Rbs::RestEndpoint' do
 
-  let(:swagger_spec) { JSON.parse(File.read('spec/fixtures/swagger.json')) }
+  let(:swagger_spec) { SPEC }
 
   describe 'example path /oauth/token' do
     let(:path_method) { ["/oauth/token", "post"] }
@@ -58,6 +59,28 @@ describe 'Swagger2Rbs::RestEndpoint' do
       describe 'path /pet/{petId}' do
         let(:path_method) { ["/pet/{petId}", "delete"] }
         it { expect(subject.parameters_typed).to eq("(String petId, ?Hash[untyped, untyped] options)") }
+      end
+    end
+
+    describe 'to_yaml' do
+      describe 'path /pet/{petId}' do
+        let(:path_method) { ["/pet/{petId}", "delete"] }
+        it "" do
+          result = subject.to_yaml
+          expect(result[:method_name]).to eq("deletePet")
+          expect(result[:parameters]).to eq(["petId"])
+          expect(result[:body]).to eq({})
+        end
+      end
+
+      describe 'path /pet' do
+        let(:path_method) { ["/pet", "put"] }
+        it "to_yaml" do
+          result = subject.to_yaml
+          expect(result[:method_name]).to eq("updatePet")
+          expect(result[:parameters]).to eq([])
+          expect(result[:body]).to eq({"id"=>"integer", "name"=>"string", "category"=>{"id"=>"integer", "name"=>"string"}, "photoUrls"=>["string"], "tags"=>[{"id"=>"integer", "name"=>"string"}], "status"=>"string"})
+        end
       end
     end
 

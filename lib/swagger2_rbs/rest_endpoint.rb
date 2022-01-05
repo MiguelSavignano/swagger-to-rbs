@@ -26,6 +26,18 @@ module Swagger2Rbs
       raise e, "Context: #{path} #{method} Message: #{e.message}"
     end
 
+    def to_yaml
+      {
+        path: path,
+        method: method,
+        parameters: parameters,
+        method_name: method_name,
+        body: body,
+      }
+    rescue => e
+      raise e, "Context: #{path} #{method} Message: #{e.message}"
+    end
+
     def method_name
       props["operationId"] || path.slugify.gsub("-", "_")
     end
@@ -59,8 +71,8 @@ module Swagger2Rbs
     def body_typed
       return nil if method == "get"
 
-      return "(Hash[String, untyped])" unless body
-      return "(Hash[String, untyped])" if body.empty?
+      return "(Hash[String, untyped] options)" unless body
+      return "(Hash[String, untyped] options)" if body.empty?
 
     "({" + body&.map{ |k, v| to_typed(k, v) }.join(", ") + "}" + " body, ?Hash[untyped, untyped] options)"
     end
