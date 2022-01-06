@@ -46,19 +46,24 @@ describe 'Swagger2Rbs::RestEndpoint' do
       end
     end
 
-    describe "#parameters_typed" do
+    describe "#typed_parameters" do
       describe 'path /oauth/token' do
-        it { expect(subject.parameters_typed).to eq(nil) }
+        it { expect(subject.typed_parameters).to eq("({ grant_type: String, client_id: String, client_secret: String, scope: String } body, ?Hash[untyped, untyped] options)") }
       end
 
       describe 'path /accounts/{id}' do
         let(:path_method) { ["/accounts/{id}", "get"] }
-        it { expect(subject.parameters_typed).to eq("(String id, ?Hash[untyped, untyped] options)") }
+        it { expect(subject.typed_parameters).to eq("(String id, ?Hash[untyped, untyped] options)") }
       end
 
       describe 'path /pet/{petId}' do
         let(:path_method) { ["/pet/{petId}", "delete"] }
-        it { expect(subject.parameters_typed).to eq("(String petId, ?Hash[untyped, untyped] options)") }
+        it { expect(subject.typed_parameters).to eq("(String petId, ?Hash[untyped, untyped] options)") }
+      end
+
+      describe 'path /user/{username}' do
+        let(:path_method) { ["/user/{username}", "put"] }
+        it { expect(subject.typed_parameters).to eq("(String username, { id: String }, ?Hash[untyped, untyped] options)") }
       end
     end
 

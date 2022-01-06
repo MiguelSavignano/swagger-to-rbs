@@ -6,6 +6,25 @@ module Swagger2Rbs
       schema_to_typed(schema, {})
     end
 
+    def typed_parameters
+      options_typed = "?Hash[untyped, untyped] options"
+      return "(#{options_typed})" unless body && parameters
+      return "(#{options_typed})" if body.empty? && parameters.empty?
+
+      typed_parameters = parameters&.map{|it| "String #{it}" } || []
+
+      typed = (body.is_a?(Array) ? body[0] : body)&.map{ |k, v| to_typed(k, v) }
+      result = if body.is_a?(Array)
+        typed_parameters.push("Array[{#{typed}}] body")
+      elsif !typed.empty?
+        typed_parameters.push("#{typed}} body")
+      else
+        typed_parameters
+      end
+
+      "(#{result.push(options_typed).join(', ')})"
+    end
+
     def parameters_typed
       return nil unless parameters
       return nil if parameters&.empty?
