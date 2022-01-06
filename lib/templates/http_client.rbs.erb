@@ -1,5 +1,11 @@
-
 # Classes
+
+module HTTParty
+  class Response
+    def body: -> untyped
+    def success?: -> bool
+  end
+end
 
 class <%= @module_name %>
   include HTTParty

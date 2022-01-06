@@ -105,7 +105,7 @@ module Swagger2Rbs
     end
 
     def parameters_for_method
-      return parameters.push("options = {}").join(", ") if (method == "get")
+      return parameters.push("options = {}").join(", ") if method == "get"
 
       if body&.empty?
         parameters.push("options = {}").join(", ")
@@ -117,7 +117,13 @@ module Swagger2Rbs
     def schema_to_typed(schema, memo = {})
       return nil unless schema
 
-      schema["properties"]&.reduce(memo)do |memo, (k,v)|
+      properties = if schema["type"]["array"]
+        schema["items"]["properties"]
+      else
+        schema["properties"]
+      end
+
+     result = properties&.reduce(memo)do |memo, (k,v)|
         if v["type"] == "object"
           memo.merge({k => schema_to_typed(v, {})})
         elsif v["type"] == "array"
@@ -130,6 +136,9 @@ module Swagger2Rbs
           memo.merge({k => v["type"] })
         end
       end
+      return [result] if schema["type"]["array"]
+
+      result
     end
 
     def resolve_of(data)
