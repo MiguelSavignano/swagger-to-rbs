@@ -12,7 +12,7 @@ class <%= @module_name %>
   end
   <%- @data[:endpoints].each do |endpoint| -%>
 
-  <%- if endpoint[:method] == 'get' -%>
+  <%- unless endpoint[:has_body] -%>
   def <%= endpoint[:method_name] %>(<%= endpoint[:parameters_for_method] %>)
     self.class.<%= endpoint[:http_method] %>("<%= endpoint[:path] %>", options)
   end

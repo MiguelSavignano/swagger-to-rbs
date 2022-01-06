@@ -18,11 +18,16 @@ module Swagger2Rbs
         http_method: method,
         parameters_for_method: parameters_for_method,
         typed_parameters_for_method: typed_parameters_for_method,
+        has_body: body?,
         method_name: method_name,
         response_typed: response_typed,
       }
     rescue => e
       raise e, "Context: #{path} #{method} Message: #{e.message}"
+    end
+
+    def body?
+      body && !body.empty?
     end
 
     def to_yaml
