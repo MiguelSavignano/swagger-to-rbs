@@ -96,7 +96,6 @@ describe 'Swagger2Rbs::RestEndpoint' do
       end
     end
 
-
     describe "#body_typed" do
       describe 'path /oauth/token' do
         let(:path_method) { ["/oauth/token", "post"] }
