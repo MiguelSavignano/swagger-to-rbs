@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'swagger-to-rbs'
-  s.version     = '0.2.0'
+  s.version     = '0.3.0'
   s.executables << 'swagger-to-rbs'
   s.date        = '2022-01-02'
   s.summary     = 'Swagger to rbs'
@@ -13,6 +13,6 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/MiguelSavignano/swagger-to-rbs'
   s.license     = 'MIT'
   s.require_paths = ['lib']
-  s.add_runtime_dependency 'thor', '~> 0'
+  s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'slugify'
 end
