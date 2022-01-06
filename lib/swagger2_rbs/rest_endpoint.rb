@@ -15,13 +15,10 @@ module Swagger2Rbs
     def to_h
       {
         path: path_with_parameters,
-        method: method,
-        parameters: parameters,
+        http_method: method,
         parameters_for_method: parameters_for_method,
-        parameters_typed: parameters_typed,
+        typed_parameters_for_method: typed_parameters_for_method,
         method_name: method_name,
-        body: body,
-        body_typed: body_typed,
         response_typed: response_typed,
       }
     rescue => e

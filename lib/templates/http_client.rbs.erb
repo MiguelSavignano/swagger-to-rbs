@@ -13,10 +13,10 @@ class <%= @module_name %>
   def initialize: -> void
   <%- @data[:endpoints].each do |endpoint| -%>
 
-  <%- if endpoint[:method] == 'get' -%>
-  def <%= endpoint[:method_name] %>: <%= endpoint[:parameters_typed] %> -> HTTParty::Response
+  <%- if endpoint[:http_method] == 'get' -%>
+  def <%= endpoint[:method_name] %>: <%= endpoint[:typed_parameters_for_method] %> -> HTTParty::Response
   <%- else -%>
-  def <%= endpoint[:method_name] %>: <%= endpoint[:body_typed] %> -> HTTParty::Response
+  def <%= endpoint[:method_name] %>: <%= endpoint[:typed_parameters_for_method] %> -> HTTParty::Response
   <%- end -%>
   <%- end -%>
 end

@@ -6,7 +6,7 @@ module Swagger2Rbs
       schema_to_typed(schema, {})
     end
 
-    def typed_parameters
+    def typed_parameters_for_method
       options_typed = "?Hash[untyped, untyped] options"
       return "(#{options_typed})" unless body && parameters
       return "(#{options_typed})" if body.empty? && parameters.empty?
