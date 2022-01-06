@@ -26,6 +26,18 @@ module Swagger2Rbs
       raise e, "Context: #{path} #{method} Message: #{e.message}"
     end
 
+    def to_yaml
+      {
+        path: path,
+        method: method,
+        parameters: parameters,
+        method_name: method_name,
+        body: body,
+      }
+    rescue => e
+      raise e, "Context: #{path} #{method} Message: #{e.message}"
+    end
+
     def method_name
       props["operationId"] || path.slugify.gsub("-", "_")
     end
@@ -46,7 +58,8 @@ module Swagger2Rbs
     end
 
     def parameters_typed
-      return nil if method != "get"
+      return nil unless parameters
+      return nil if parameters&.empty?
 
       result = parameters&.map{|it| "String #{it}" }
       &.push("?Hash[untyped, untyped] options")
@@ -58,8 +71,8 @@ module Swagger2Rbs
     def body_typed
       return nil if method == "get"
 
-      return "(Hash[String, untyped])" unless body
-      return "(Hash[String, untyped])" if body.empty?
+      return "(Hash[String, untyped] options)" unless body
+      return "(Hash[String, untyped] options)" if body.empty?
 
     "({" + body&.map{ |k, v| to_typed(k, v) }.join(", ") + "}" + " body, ?Hash[untyped, untyped] options)"
     end
@@ -94,7 +107,11 @@ module Swagger2Rbs
     def parameters_for_method
       return parameters.push("options = {}").join(", ") if (method == "get")
 
-      parameters.push("body").push("options = {}").join(", ")
+      if body&.empty?
+        parameters.push("options = {}").join(", ")
+      else
+        parameters.push("body").push("options = {}").join(", ")
+      end
     end
 
     def schema_to_typed(schema, memo = {})
