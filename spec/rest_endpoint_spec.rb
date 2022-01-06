@@ -89,7 +89,13 @@ describe 'Swagger2Rbs::RestEndpoint' do
         let(:path_method) { ["/accounts/{id}/contacts", "post"] }
         it { expect(subject.body["contact_numbers"]).to eq([{"number"=>"string", "type"=>"string"}]) }
       end
+
+      describe 'path /accounts/{id}/contacts array first object' do
+        let(:path_method) { ["/user/createWithList", "post"] }
+        it { expect(subject.body).to eq([{"id" => "string", "username" => "string"}]) }
+      end
     end
+
 
     describe "#body_typed" do
       describe 'path /oauth/token' do
