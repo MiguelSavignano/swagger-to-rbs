@@ -63,7 +63,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
 
       describe 'path /user/{username}' do
         let(:path_method) { ["/user/{username}", "put"] }
-        it { expect(subject.typed_parameters).to eq("(String username, { id: String }, ?Hash[untyped, untyped] options)") }
+        it { expect(subject.typed_parameters).to eq("(String username, {id: Integer, username: String, firstName: String, lastName: String, email: String, password: String, phone: String, userStatus: Integer} body, ?Hash[untyped, untyped] options)") }
       end
     end
 
