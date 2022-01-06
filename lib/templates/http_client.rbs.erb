@@ -10,6 +10,13 @@ end
 class <%= @module_name %>
   include HTTParty
 
+  def self.headers: (untyped headers) -> void
+  def self.base_uri: (String uri) -> void
+  def self.get: (String path, untyped options) -> void
+  def self.post: (String path, untyped options) -> void
+  def self.put: (String path, untyped options) -> void
+  def self.delete: (String path, untyped options) -> void
+
   def initialize: -> void
   <%- @data[:endpoints].each do |endpoint| -%>
 
