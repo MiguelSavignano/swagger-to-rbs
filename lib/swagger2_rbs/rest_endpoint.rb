@@ -71,10 +71,16 @@ module Swagger2Rbs
     def body_typed
       return nil if method == "get"
 
-      return "(Hash[String, untyped] options)" unless body
-      return "(Hash[String, untyped] options)" if body.empty?
+      options_typed = "?Hash[untyped, untyped] options"
+      return "(#{options_typed})" unless body
+      return "(#{options_typed})" if body.empty?
 
-    "({" + body&.map{ |k, v| to_typed(k, v) }.join(", ") + "}" + " body, ?Hash[untyped, untyped] options)"
+      typed = (body.is_a?(Array) ? body[0] : body)&.map{ |k, v| to_typed(k, v) }.join(", ")
+      if body.is_a?(Array)
+        "(Array[{#{typed}}] body, #{options_typed})"
+      else
+        "({#{typed}} body, #{options_typed})"
+      end
     end
 
     def type_case(str)
