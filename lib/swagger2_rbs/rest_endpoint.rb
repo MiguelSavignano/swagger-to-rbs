@@ -116,9 +116,13 @@ module Swagger2Rbs
 
     def schema_to_typed(schema, memo = {})
       return nil unless schema
-      # schema["items"]["properties"]
+      properties = if schema["type"]["array"]
+        schema["items"]["properties"]
+      else
+        schema["properties"]
+      end
 
-      schema["properties"]&.reduce(memo)do |memo, (k,v)|
+      properties&.reduce(memo)do |memo, (k,v)|
         if v["type"] == "object"
           memo.merge({k => schema_to_typed(v, {})})
         elsif v["type"] == "array"
