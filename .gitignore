@@ -2,6 +2,7 @@
 /swagger.json
 /rest-api.yaml
 my_api.rb
+my_api.yaml
 my_api.rbs
 test.rb
 data.json

@@ -22,6 +22,19 @@ module Swagger2Rbs
       File.write("#{file_name}.rbs", ::Swagger2Rbs.generate_rbs(name, data.dup))
     end
 
+    desc 'genearte-yaml', 'generate yaml file'
+    option :name, desc: 'Name'
+    option :spec, desc: 'Swagger file path'
+    def generate_yaml
+      @name = options[:name]
+      @swagger_path = options[:spec]
+      @debug = options[:debug]
+      swagger_spec = JSON.parse(File.read(@swagger_path))
+
+      file_name = to_underscore(name)
+      File.write("#{file_name}.yaml", ::Swagger2Rbs.swagger_to_rest_api_yaml(swagger_spec))
+    end
+
     private
     def fetch_data
       if swagger_path

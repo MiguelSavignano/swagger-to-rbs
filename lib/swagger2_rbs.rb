@@ -24,16 +24,23 @@ module Swagger2Rbs
     new_swagger_spec
   end
 
-  def self.swagger_to_rest_api(swagger_spec)
+  def self.swagger_to_rest_api(swagger_spec, parse_method = :to_h)
     result = []
     resolve_all_ref(swagger_spec)["paths"].each do |path, data|
       data.each do |method, props|
         rest_data = RestEndpoint.new(path, method, props)
-        result << rest_data.to_h
+        result << rest_data.send(parse_method)
       end
     end
 
     { base_uri: swagger_spec["servers"].first["url"], endpoints: result }
+  end
+
+  def self.swagger_to_rest_api_yaml(swagger_spec)
+    response = swagger_to_rest_api(swagger_spec, :to_yaml)
+    YAML.dump(
+      HashHelper.deep_transform_keys_in_object!(response, &:to_s)
+    ).gsub("---\n", "")
   end
 
   def self.rest_api_all(spec)

@@ -73,7 +73,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
         it "" do
           result = subject.to_yaml
           expect(result[:method_name]).to eq("deletePet")
-          expect(result[:parameters]).to eq(["petId"])
+          expect(result[:path_parameters]).to eq(["petId"])
           expect(result[:body]).to eq({})
         end
       end
@@ -83,7 +83,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
         it "to_yaml" do
           result = subject.to_yaml
           expect(result[:method_name]).to eq("updatePet")
-          expect(result[:parameters]).to eq([])
+          expect(result[:path_parameters]).to eq([])
           expect(result[:body]).to eq({"id"=>"integer", "name"=>"string", "category"=>{"id"=>"integer", "name"=>"string"}, "photoUrls"=>["string"], "tags"=>[{"id"=>"integer", "name"=>"string"}], "status"=>"string"})
         end
       end
