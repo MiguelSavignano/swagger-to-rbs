@@ -104,7 +104,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
     describe "#body_typed" do
       describe 'path /oauth/token' do
         let(:path_method) { ["/oauth/token", "post"] }
-        it { expect(subject.body_typed).to eq("({grant_type: String, client_id: String, client_secret: String, scope: String} body, ?Hash[untyped, untyped] options)") }
+        it { expect(subject.body_typed).to eq("{ grant_type: String, client_id: String, client_secret: String, scope: String }") }
       end
 
       describe 'path /accounts/{id}' do
@@ -116,7 +116,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
         let(:path_method) { ["/accounts/{id}/contacts", "post"] }
         it do
           expect(subject.body_typed)
-            .to eq("({account_id: String, relationship: String, first_name: String, last_name: String, email: String, communications_opt_out: String, contact_numbers: Array[{type: String, number: String}]} body, ?Hash[untyped, untyped] options)")
+            .to eq("{ account_id: String, relationship: String, first_name: String, last_name: String, email: String, communications_opt_out: String, contact_numbers: Array[{type: String, number: String}] }")
         end
       end
 
@@ -124,7 +124,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
         let(:path_method) { ["/data/v1/policy", "post"] }
         it do
           expect(subject.body_typed)
-          .to eq("({payloads: Array[{identifier: {externalIdField: String, value: String}, data: {Account: {UUID: String}, InsuranceType: String}}]} body, ?Hash[untyped, untyped] options)")
+          .to eq("{ payloads: Array[{identifier: {externalIdField: String, value: String}, data: {Account: {UUID: String}, InsuranceType: String}}] }")
         end
       end
 
@@ -132,7 +132,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
         let(:path_method) { ["/certificates", "post"] }
         it do
           expect(subject.body_typed)
-            .to eq("({type: String, policy_ids: Array[String], fields: {holder_name: String}} body, ?Hash[untyped, untyped] options)")
+            .to eq("{ type: String, policy_ids: Array[String], fields: {holder_name: String} }")
         end
       end
     end

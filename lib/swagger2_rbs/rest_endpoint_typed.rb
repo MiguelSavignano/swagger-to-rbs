@@ -13,41 +13,18 @@ module Swagger2Rbs
 
       typed_parameters = parameters&.map{|it| "String #{it}" } || []
 
-      typed = (body.is_a?(Array) ? body[0] : body)&.map{ |k, v| to_typed(k, v) }
-      result = if body.is_a?(Array)
-        typed_parameters.push("Array[{ #{typed.join(', ')} }] body")
-      elsif !typed.empty?
-        typed_parameters.push("{ #{typed.join(', ')} } body")
-      else
-        typed_parameters
-      end
+      typed_parameters.push("#{body_typed} body") if body?
 
-      "(#{result.push(options_typed).join(', ')})"
-    end
-
-    def parameters_typed
-      return nil unless parameters
-      return nil if parameters&.empty?
-
-      result = parameters&.map{|it| "String #{it}" }
-      &.push("?Hash[untyped, untyped] options")
-      &.join(", ")
-
-      "(#{result})"
+      "(#{typed_parameters.push(options_typed).join(', ')})"
     end
 
     def body_typed
-      return nil if method == "get"
-
-      options_typed = "?Hash[untyped, untyped] options"
-      return "(#{options_typed})" unless body
-      return "(#{options_typed})" if body.empty?
-
-      typed = (body.is_a?(Array) ? body[0] : body)&.map{ |k, v| to_typed(k, v) }.join(", ")
+      return nil unless body?
+      typed = (body.is_a?(Array) ? body[0] : body)&.map{ |k, v| to_typed(k, v) }.join(', ')
       if body.is_a?(Array)
-        "(Array[{#{typed}}] body, #{options_typed})"
+        "Array[{ #{typed} }]"
       else
-        "({#{typed}} body, #{options_typed})"
+        "{ #{typed} }"
       end
     end
 
