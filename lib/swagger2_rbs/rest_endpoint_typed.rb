@@ -15,9 +15,9 @@ module Swagger2Rbs
 
       typed = (body.is_a?(Array) ? body[0] : body)&.map{ |k, v| to_typed(k, v) }
       result = if body.is_a?(Array)
-        typed_parameters.push("Array[{#{typed.join(', ')}}] body")
+        typed_parameters.push("Array[{ #{typed.join(', ')} }] body")
       elsif !typed.empty?
-        typed_parameters.push("{#{typed.join(', ')}} body")
+        typed_parameters.push("{ #{typed.join(', ')} } body")
       else
         typed_parameters
       end
