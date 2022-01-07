@@ -19,7 +19,8 @@ module Swagger2Rbs
 
       file_name = to_underscore(name)
       File.write("#{file_name}.rb", ::Swagger2Rbs.generate(name, data.dup))
-      File.write("#{file_name}.rbs", ::Swagger2Rbs.generate_rbs(name, data.dup))
+      Dir.mkdir('sig') unless File.exist?("sig")
+      File.write("sig/#{file_name}.rbs", ::Swagger2Rbs.generate_rbs(name, data.dup))
     end
 
     desc 'genearte-yaml', 'generate yaml file'
