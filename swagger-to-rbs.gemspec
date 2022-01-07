@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'swagger-to-rbs'
-  s.version     = '0.4.0'
+  s.version     = '0.5.0'
   s.executables << 'swagger-to-rbs'
   s.date        = '2022-01-02'
   s.summary     = 'Swagger to rbs'
