@@ -5,23 +5,11 @@ require_relative 'swagger2_rbs/hash_helper'
 
 module Swagger2Rbs
 
-  def self.resolve_ref(hash, key, value)
-    ref_key = value.gsub("#/", "").split("/")
-    data = hash.dig(*ref_key)
-    update_key = key.split(".").reject{|k| k == "$ref"}.join(".")
-
-    [update_key, data]
-  end
-
   def self.resolve_all_ref(swagger_spec)
-    new_swagger_spec = swagger_spec.dup
-    HashHelper.walk(swagger_spec) do |key, value|
-      if key.split(".").last == "$ref"
-        update_key, data = resolve_ref(swagger_spec, key, value)
-        HashHelper.set_value(new_swagger_spec, update_key, data)
-      end
+    HashHelper.resolve_special_key(swagger_spec, "$ref") do |key, value|
+      ref_key = value.gsub("#/", "").split("/")
+      swagger_spec.dig(*ref_key)
     end
-    new_swagger_spec
   end
 
   def self.swagger_to_rest_api(swagger_spec, parse_method = :to_h)
