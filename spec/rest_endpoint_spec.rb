@@ -38,7 +38,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
 
       describe 'path /accounts/{id}' do
         let(:path_method) { ["/accounts/{id}", "get"] }
-        it { expect(subject.response).to eq({}) }
+        it { expect(subject.response_typed).to eq("{ data: {id: String, external_id: String, business_information: {name: String, type: String, website: String, identification_number: String, year_established: Number, annual_revenue: {value: Number, amount: Number, currency: String}, fulltime_employees: Integer, parttime_employees: Integer}, industry: {type: String, class_code: String, subclass_code: String}, addresses: Array[{type: String, address_line: String, city: String, state: String, country_code: String, postal_code: String}], email: String, phone_number: String} }") }
       end
     end
 

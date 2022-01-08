@@ -91,10 +91,12 @@ module Swagger2Rbs
     end
 
     def resolve_all_of(data)
-      return data unless data
-      return data unless data["allOf"]
-
-      data["allOf"].reduce(&:merge)
+      HashHelper.resolve_special_key(data, "allOf") do |key, value|
+        value.reduce(value[0]) do |memo, it|
+          memo["properties"] = memo["properties"].merge(it["properties"])
+          memo
+        end
+      end
     end
   end
 end
