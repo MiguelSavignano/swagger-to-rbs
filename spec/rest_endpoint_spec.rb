@@ -30,6 +30,18 @@ describe 'Swagger2Rbs::RestEndpoint' do
       end
     end
 
+    describe "#response_typed" do
+      describe 'path /oauth/token' do
+        let(:path_method) { ["/oauth/token", "post"] }
+        it { expect(subject.response_typed).to eq("{ access_token: String, token_type: String, expires_in: Integer, scope: String, created_at: Integer }") }
+      end
+
+      describe 'path /accounts/{id}' do
+        let(:path_method) { ["/accounts/{id}", "get"] }
+        it { expect(subject.response).to eq({}) }
+      end
+    end
+
     describe "#parameters_for_method" do
       describe 'path /oauth/token' do
         it { expect(subject.parameters_for_method).to eq("body, options = {}") }

@@ -27,7 +27,7 @@ module Swagger2Rbs
     end
 
     def body?
-      body && !body.empty?
+      HashHelper.present? body
     end
 
     def to_yaml
@@ -62,6 +62,11 @@ module Swagger2Rbs
       return {} unless body_schema
 
       schema_to_typed(body_schema)
+    end
+
+    def response
+      schema = resolve_all_of(@props.dig("responses", "200", "content", "application/json", "schema"))
+      schema_to_typed(schema, {})
     end
 
     def parameters_for_method

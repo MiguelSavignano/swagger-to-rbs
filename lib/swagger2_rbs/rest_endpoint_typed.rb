@@ -1,11 +1,6 @@
 module Swagger2Rbs
 
   module RestEndpointTyped
-    def response_typed
-      schema = resolve_all_of(@props.dig("responses", "200", "content", "application/json", "schema"))
-      schema_to_typed(schema, {})
-    end
-
     def typed_parameters_for_method
       options_typed = "?Hash[untyped, untyped] options"
       return "(#{options_typed})" unless body && parameters
@@ -19,9 +14,17 @@ module Swagger2Rbs
     end
 
     def body_typed
-      return nil unless body?
-      typed = (body.is_a?(Array) ? body[0] : body)&.map{ |k, v| to_typed(k, v) }.join(', ')
-      if body.is_a?(Array)
+      write_types(body)
+    end
+
+    def response_typed
+      write_types(response)
+    end
+
+    def write_types(data)
+      return nil unless HashHelper.present? data
+      typed = (data.is_a?(Array) ? data[0] : data)&.map{ |k, v| to_typed(k, v) }.join(', ')
+      if data.is_a?(Array)
         "Array[{ #{typed} }]"
       else
         "{ #{typed} }"

@@ -1,6 +1,10 @@
 module Swagger2Rbs
   class HashHelper
 
+    def self.present?(hash)
+      hash && !hash.empty?
+    end
+
     # https://github.com/rails/rails/blob/master/activesupport/lib/active_support/core_ext/hash/keys.rb#L129
     def self.deep_transform_keys_in_object!(object, &block)
       case object
