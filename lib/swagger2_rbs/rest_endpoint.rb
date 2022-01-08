@@ -27,7 +27,7 @@ module Swagger2Rbs
     end
 
     def body?
-      body && !body.empty?
+      HashHelper.present? body
     end
 
     def to_yaml
@@ -64,6 +64,11 @@ module Swagger2Rbs
       schema_to_typed(body_schema)
     end
 
+    def response
+      schema = resolve_all_of(@props.dig("responses", "200", "content", "application/json", "schema"))
+      schema_to_typed(schema, {})
+    end
+
     def parameters_for_method
       return parameters.push("options = {}").join(", ") if method == "get"
 
@@ -86,10 +91,12 @@ module Swagger2Rbs
     end
 
     def resolve_all_of(data)
-      return data unless data
-      return data unless data["allOf"]
-
-      data["allOf"].reduce(&:merge)
+      HashHelper.resolve_special_key(data, "allOf") do |key, value|
+        value.reduce(value[0]) do |memo, it|
+          memo["properties"] = memo["properties"].merge(it["properties"])
+          memo
+        end
+      end
     end
   end
 end
