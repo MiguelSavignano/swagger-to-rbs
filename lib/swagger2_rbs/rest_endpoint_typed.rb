@@ -22,7 +22,7 @@ module Swagger2Rbs
     end
 
     def all_responses_typed
-      return "untyped response" unless @props.dig("responses")
+      return '{ "200" => untyped }' unless @props.dig("responses")
 
       write_types(all_responses)
     end
@@ -49,13 +49,13 @@ module Swagger2Rbs
     end
 
     def to_typed(k, v)
-      return "#{k}: #{type_case(v)}" unless v.is_a?(Array) || v.is_a?(Hash)
-      return "#{k}: {#{v.map{ |k2, v2| to_typed(k2, v2) }.join(", ")}}" if v.is_a?(Hash)
+      return "\"#{k}\" => #{type_case(v)}" unless v.is_a?(Array) || v.is_a?(Hash)
+      return "\"#{k}\" => {#{v.map{ |k2, v2| to_typed(k2, v2) }.join(", ")}}" if v.is_a?(Hash)
 
       if v[0]&.is_a?(Hash)
-        "#{k}: Array[{" + v[0].map{ |k, v| to_typed(k, v) }.join(", ") + "}]"
+        "\"#{k}\" => Array[{" + v[0].map{ |k, v| to_typed(k, v) }.join(", ") + "}]"
       else
-        "#{k}: Array[#{type_case(v[0])}]"
+        "\"#{k}\" => Array[#{type_case(v[0])}]"
       end
     end
 

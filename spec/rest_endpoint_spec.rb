@@ -18,7 +18,7 @@ describe 'Swagger2Rbs::RestEndpoint' do
       it 'nil values' do
         data = { "400" => nil, "200" => { success: "string" } }
         result = subject.write_types(data)
-        expect(result).to eq("{ 400: untyped, 200: {success: String} }")
+        expect(result).to eq('{ "400" => untyped, "200" => {"success" => String} }')
       end
 
       it 'array' do
