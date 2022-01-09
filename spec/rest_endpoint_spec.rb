@@ -14,20 +14,6 @@ describe 'Swagger2Rbs::RestEndpoint' do
       Swagger2Rbs::RestEndpoint.new(path_method[0], path_method[1], path_props)
     }
 
-    describe "#write_types" do
-      it 'nil values' do
-        data = { "400" => nil, "200" => { "success" => "string" } }
-        result = subject.write_types(data)
-        expect(result).to eq('{ "400" => untyped, "200" => {"success" => String} }')
-      end
-
-      it 'array' do
-        data = { "errors" => [{ "success" => "string" }] }
-        result = subject.write_types(data)
-        expect(result).to eq('{ "errors" => Array[{"success" => String}] }')
-      end
-    end
-
     it '#method_name' do
       expect(subject.method_name).to eq('get_access_token')
     end

@@ -63,12 +63,12 @@ module Swagger2Rbs
       body_schema = resolve_of(props.dig("requestBody", "content", "application/json", "schema"))
       return {} unless body_schema
 
-      schema_to_typed(body_schema)
+      schema_to_hash(body_schema)
     end
 
     def response(http_code)
       schema = resolve_all_of(@props.dig("responses", http_code, "content", "application/json", "schema"))
-      schema_to_typed(schema, {})
+      schema_to_hash(schema, {})
     end
 
     def all_responses
@@ -92,6 +92,29 @@ module Swagger2Rbs
       else
         parameters.push("body").push("options = {}").join(", ")
       end
+    end
+
+    def schema_to_hash(schema, memo = {})
+      return nil unless schema
+
+      properties = schema["type"] == "array" ? schema["items"]["properties"] : schema["properties"]
+
+      result = properties&.reduce(memo)do |memo, (k,v)|
+        if v["type"] == "object"
+          memo.merge({k => schema_to_hash(v, {})})
+        elsif v["type"] == "array"
+          if v.dig("items", "type") == "object"
+            memo.merge({k => [schema_to_hash(v["items"], {})] })
+          else
+            memo.merge({k => [v.dig("items", "type")] })
+          end
+        else
+          memo.merge({k => v["type"] })
+        end
+      end
+      return [result] if schema["type"] == "array"
+
+      result
     end
 
     def resolve_of(data)
