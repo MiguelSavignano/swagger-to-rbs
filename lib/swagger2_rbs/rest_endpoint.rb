@@ -37,8 +37,8 @@ module Swagger2Rbs
         path_parameters: parameters,
         method_name: method_name,
         body: body,
-        response: response_typed("200"),
-        all_responses_typed: all_responses_typed
+        response: response("200"),
+        all_responses: all_responses
       }
     rescue => e
       raise e, "Context: #{path} #{method} Message: #{e.message}"

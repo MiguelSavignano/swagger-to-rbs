@@ -20,6 +20,6 @@ class <%= @module_name %>
   def initialize: -> void
   <%- @data[:endpoints].each do |endpoint| -%>
 
-  def <%= endpoint[:method_name] %>: <%= endpoint[:typed_parameters_for_method] %> -> HTTParty::Response
+  def <%= endpoint[:method_name] %>: <%= endpoint[:typed_parameters_for_method] %> -> [HTTParty::Response, <%= endpoint[:all_responses_typed] %>]
   <%- end -%>
 end

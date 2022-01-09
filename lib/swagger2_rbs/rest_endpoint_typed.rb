@@ -47,6 +47,8 @@ module Swagger2Rbs
       case str
       when "boolean"
         "bool"
+      when nil
+        "untyped"
       else
         str&.capitalize
       end
