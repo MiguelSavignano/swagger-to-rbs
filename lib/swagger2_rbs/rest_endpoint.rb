@@ -21,6 +21,7 @@ module Swagger2Rbs
         has_body: body?,
         method_name: method_name,
         all_responses_typed: all_responses_typed,
+        all_responses_for_return_method: all_responses_for_return_method,
       }
     rescue => e
       raise e, "Context: #{path} #{method} Message: #{e.message}"
@@ -68,6 +69,19 @@ module Swagger2Rbs
     def response(http_code)
       schema = resolve_all_of(@props.dig("responses", http_code, "content", "application/json", "schema"))
       schema_to_typed(schema, {})
+    end
+
+    def all_responses
+      result = @props.dig("responses").keys.reduce({}) do |memo, key|
+        memo.merge({ key => response(key) })
+      end
+    end
+
+    def all_responses_for_return_method
+      return '{ "200" => response.body }' if all_responses.empty?
+
+      result = all_responses.keys.map{|key| "\"#{key}\" => response.body" }.join(", ")
+      "{ #{result} }"
     end
 
     def parameters_for_method

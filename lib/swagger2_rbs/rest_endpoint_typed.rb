@@ -21,12 +21,6 @@ module Swagger2Rbs
       write_types(response(http_code))
     end
 
-    def all_responses
-      result = @props.dig("responses").keys.reduce({}) do |memo, key|
-        memo.merge({ key => response(key) })
-      end
-    end
-
     def all_responses_typed
       return "untyped response" unless @props.dig("responses")
 
