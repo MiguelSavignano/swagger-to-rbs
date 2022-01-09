@@ -17,8 +17,8 @@ module Swagger2Rbs
       write_types(body)
     end
 
-    def response_typed
-      write_types(response)
+    def response_typed(http_code)
+      write_types(response(http_code))
     end
 
     def write_types(data)
@@ -54,7 +54,7 @@ module Swagger2Rbs
     def schema_to_typed(schema, memo = {})
       return nil unless schema
 
-      properties = schema["type"]["array"] ? schema["items"]["properties"] : schema["properties"]
+      properties = schema["type"] == "array" ? schema["items"]["properties"] : schema["properties"]
 
       result = properties&.reduce(memo)do |memo, (k,v)|
         if v["type"] == "object"
@@ -69,7 +69,7 @@ module Swagger2Rbs
           memo.merge({k => v["type"] })
         end
       end
-      return [result] if schema["type"]["array"]
+      return [result] if schema["type"] == "array"
 
       result
     end

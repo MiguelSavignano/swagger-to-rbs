@@ -37,7 +37,7 @@ module Swagger2Rbs
         path_parameters: parameters,
         method_name: method_name,
         body: body,
-        response: response_typed,
+        response: response_typed("200"),
       }
     rescue => e
       raise e, "Context: #{path} #{method} Message: #{e.message}"
@@ -64,8 +64,8 @@ module Swagger2Rbs
       schema_to_typed(body_schema)
     end
 
-    def response
-      schema = resolve_all_of(@props.dig("responses", "200", "content", "application/json", "schema"))
+    def response(http_code)
+      schema = resolve_all_of(@props.dig("responses", http_code, "content", "application/json", "schema"))
       schema_to_typed(schema, {})
     end
 
