@@ -20,7 +20,7 @@ module Swagger2Rbs
         typed_parameters_for_method: typed_parameters_for_method,
         has_body: body?,
         method_name: method_name,
-        response_typed: response_typed,
+        all_responses_typed: all_responses_typed,
       }
     rescue => e
       raise e, "Context: #{path} #{method} Message: #{e.message}"
@@ -38,7 +38,7 @@ module Swagger2Rbs
         method_name: method_name,
         body: body,
         response: response_typed("200"),
-        all_response_typed: all_response_typed
+        all_responses_typed: all_responses_typed
       }
     rescue => e
       raise e, "Context: #{path} #{method} Message: #{e.message}"
