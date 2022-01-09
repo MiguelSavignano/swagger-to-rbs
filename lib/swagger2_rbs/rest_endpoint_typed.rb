@@ -21,6 +21,18 @@ module Swagger2Rbs
       write_types(response(http_code))
     end
 
+    def all_responses
+      result = @props.dig("responses").keys.reduce({}) do |memo, key|
+        memo.merge({ key => response(key) })
+      end
+    end
+
+    def all_responses_typed
+      return "untyped response" unless @props.dig("responses")
+
+      write_types(all_responses)
+    end
+
     def write_types(data)
       return nil unless HashHelper.present? data
       typed = (data.is_a?(Array) ? data[0] : data)&.map{ |k, v| to_typed(k, v) }.join(', ')

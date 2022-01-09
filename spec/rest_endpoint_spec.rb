@@ -47,6 +47,13 @@ describe 'Swagger2Rbs::RestEndpoint' do
       end
     end
 
+    describe "#all_responses_typed" do
+      describe 'path /accounts/{id} 200' do
+        let(:path_method) { ["/accounts/{id}", "get"] }
+        it { expect(subject.all_responses_typed).to eq("{ 200: {data: {id: String, external_id: String, business_information: {name: String, type: String, website: String, identification_number: String, year_established: Number, annual_revenue: {value: Number, amount: Number, currency: String}, fulltime_employees: Integer, parttime_employees: Integer}, industry: {type: String, class_code: String, subclass_code: String}, addresses: Array[{type: String, address_line: String, city: String, state: String, country_code: String, postal_code: String}], email: String, phone_number: String}}, 404: {errors: Array[{source: String, type: String, message: String}]} }") }
+      end
+    end
+
     describe "#parameters_for_method" do
       describe 'path /oauth/token' do
         it { expect(subject.parameters_for_method).to eq("body, options = {}") }
