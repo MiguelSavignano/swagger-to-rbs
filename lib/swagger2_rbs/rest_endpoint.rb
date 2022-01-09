@@ -78,9 +78,9 @@ module Swagger2Rbs
     end
 
     def all_responses_for_return_method
-      return '{ "200" => response.body }' if all_responses.empty?
+      return '{ "200" => response }' if all_responses.empty?
 
-      result = all_responses.keys.map{|key| "\"#{key}\" => response.body" }.join(", ")
+      result = all_responses.keys.map{|key| "\"#{key}\" => response" }.join(", ")
       "{ #{result} }"
     end
 
