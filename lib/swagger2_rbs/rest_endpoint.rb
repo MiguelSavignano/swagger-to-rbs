@@ -20,7 +20,8 @@ module Swagger2Rbs
         typed_parameters_for_method: typed_parameters_for_method,
         has_body: body?,
         method_name: method_name,
-        response_typed: response_typed,
+        all_responses_typed: all_responses_typed,
+        all_responses_for_return_method: all_responses_for_return_method,
       }
     rescue => e
       raise e, "Context: #{path} #{method} Message: #{e.message}"
@@ -37,7 +38,8 @@ module Swagger2Rbs
         path_parameters: parameters,
         method_name: method_name,
         body: body,
-        response: response_typed("200"),
+        response: response("200"),
+        all_responses: all_responses
       }
     rescue => e
       raise e, "Context: #{path} #{method} Message: #{e.message}"
@@ -61,12 +63,25 @@ module Swagger2Rbs
       body_schema = resolve_of(props.dig("requestBody", "content", "application/json", "schema"))
       return {} unless body_schema
 
-      schema_to_typed(body_schema)
+      schema_to_hash(body_schema)
     end
 
     def response(http_code)
       schema = resolve_all_of(@props.dig("responses", http_code, "content", "application/json", "schema"))
-      schema_to_typed(schema, {})
+      schema_to_hash(schema, {})
+    end
+
+    def all_responses
+      result = @props.dig("responses").keys.reduce({}) do |memo, key|
+        memo.merge({ key => response(key) })
+      end
+    end
+
+    def all_responses_for_return_method
+      return '{ "200" => response }' if all_responses.empty?
+
+      result = all_responses.keys.map{|key| "\"#{key}\" => response" }.join(", ")
+      "{ #{result} }"
     end
 
     def parameters_for_method
@@ -77,6 +92,29 @@ module Swagger2Rbs
       else
         parameters.push("body").push("options = {}").join(", ")
       end
+    end
+
+    def schema_to_hash(schema, memo = {})
+      return nil unless schema
+
+      properties = schema["type"] == "array" ? schema["items"]["properties"] : schema["properties"]
+
+      result = properties&.reduce(memo)do |memo, (k,v)|
+        if v["type"] == "object"
+          memo.merge({k => schema_to_hash(v, {})})
+        elsif v["type"] == "array"
+          if v.dig("items", "type") == "object"
+            memo.merge({k => [schema_to_hash(v["items"], {})] })
+          else
+            memo.merge({k => [v.dig("items", "type")] })
+          end
+        else
+          memo.merge({k => v["type"] })
+        end
+      end
+      return [result] if schema["type"] == "array"
+
+      result
     end
 
     def resolve_of(data)

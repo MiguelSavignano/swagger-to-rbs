@@ -13,11 +13,13 @@ class <%= @module_name %>
 
   <%- unless endpoint[:has_body] -%>
   def <%= endpoint[:method_name] %>(<%= endpoint[:parameters_for_method] %>)
-    self.class.<%= endpoint[:http_method] %>("<%= endpoint[:path] %>", options)
+    response = self.class.<%= endpoint[:http_method] %>("<%= endpoint[:path] %>", options)
+    [response, <%= endpoint[:all_responses_for_return_method] %>]
   end
   <%- else -%>
   def <%= endpoint[:method_name] %>(<%= endpoint[:parameters_for_method] %>)
-    self.class.<%= endpoint[:http_method] %>("<%= endpoint[:path] %>", { body: body.to_json }.merge(options))
+    response = self.class.<%= endpoint[:http_method] %>("<%= endpoint[:path] %>", { body: body.to_json }.merge(options))
+    [response, <%= endpoint[:all_responses_for_return_method] %>]
   end
   <%- end -%>
   <%- end -%>
